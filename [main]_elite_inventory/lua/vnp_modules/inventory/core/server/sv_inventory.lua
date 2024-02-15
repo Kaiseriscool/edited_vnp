@@ -679,8 +679,7 @@ hook.Add("PlayerInitialSpawn", "_NewSuits????", function(ply)
 end)
 
 local nonjews = {
-    ["76561198880288891"] = true,
-    ["76561198377560491"] = true,
+    ["76561198377560491"] = true, -- Me (you can remove me if you want)
 }
 
 
