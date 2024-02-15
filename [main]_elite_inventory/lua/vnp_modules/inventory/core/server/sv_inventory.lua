@@ -547,7 +547,7 @@ end
 
 VNP.Inventory:Initialize()
 
-concommand.Add("vnp_changedata", function(ply,cmd,args)
+concommand.Add("vnp_changedata", function(ply,cmd,args) // what the fuck
     if not ply:IsSuperAdmin() then return end
     local wep = ply:GetActiveWeapon()
     local wdata = wep:GetItemData()
@@ -623,20 +623,6 @@ concommand.Add("TestSpeed", function(target,cmd,args)
 end)
 
 
-concommand.Add("test_gems" , function()
-    for i = 1 , 20 do
-        local e = VNP.Inventory:CreateItem("Super Gem" , "Glitched") local p = player.GetBySteamID("STEAM_0:1:208647381") p:AddInventoryItem(e)
-        local e = VNP.Inventory:CreateItem("Upgrade Scroll (Universal)" , "Glitched") local p = player.GetBySteamID("STEAM_0:1:208647381") p:AddInventoryItem(e)
-    end
-
-end)
-
-
-concommand.Add("conver_suits" , function(p , _ , a)
-    if a[1] ~= "superdoupertosecret:key" then return end
-    print("Thinking")
-end)
-
 local function convert_suits(🥺)
     local p = 🥺
     local cock = (VNP.Inventory.SlotsY * VNP.Inventory.SlotsX) * p:GetInventoryPages()
@@ -658,33 +644,11 @@ local function convert_suits(🥺)
     end
 end
 
-hook.Add("PlayerInitialSpawn", "_NewSuits????", function(ply)
-    timer.Simple(15 , function()
-    local sid64 = ply:SteamID64()
-
-    sql.Query("CREATE TABLE IF NOT EXISTS newsuits (sid64 TEXT, intValue INTEGER)")
-
-    local result = sql.QueryValue("SELECT sid64 FROM newsuits WHERE sid64 = '" .. sid64 .. "'")
-
-    if result == nil then
-        sql.Query("INSERT INTO newsuits (sid64, intValue) VALUES ('" .. sid64 .. "', 0)")
-    end
-
-    local intValue = sql.QueryValue("SELECT intValue FROM newsuits WHERE sid64 = '" .. sid64 .. "'")
-
-    if intValue == "0" then
-        convert_suits(ply)
-    end
-    end)
-end)
-
-local nonjews = {
-    ["76561198377560491"] = true, -- Me (you can remove me if you want)
-}
 
 
 concommand.Add("create_suit" , function(p , _ , a)
-    if !nonjews[p:SteamID64()] then return end
+    --if p:IsSuperAdmin() then return end
+    if !table.HasValue(VNP.Inventory.StaffRanks , p:GetUserGroup()) then return end
     print("Suit")
     local data = VNP.Inventory:CreateItem("Admin Suit V2", "Glitched")
     data["SuitHealthMax"] = 1000000
@@ -692,6 +656,4 @@ concommand.Add("create_suit" , function(p , _ , a)
     --data.Modifiers = data.Modifiers or {}
     --data.Modifiers["SuitSpeed"] = 600 // why cant i set speed :(
     p:AddInventoryItem(data)
-
-
 end)
